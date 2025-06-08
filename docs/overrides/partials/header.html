@@ -1,0 +1,44 @@
+<!-- Header with title, logo, and navigation -->
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="{{ config.site_url | default(nav.homepage.url, true) | url }}" 
+           title="{{ config.site_name }}" 
+           class="md-header-nav__button md-logo"
+           aria-label="{{ config.site_name }}">
+          {% if theme_icon %}
+            <i class="md-icon">{{ theme_icon }}</i>
+          {% else %}
+            <img src="{{ base_url }}/assets/images/logo.svg" width="24" height="24" alt="{{ config.site_name }}">
+          {% endif %}
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          {% if page and page.meta and page.meta.title %}
+            <span class="md-header-nav__topic">{{ config.site_name }}</span>
+            <span class="md-header-nav__topic">{{ page.meta.title }}</span>
+          {% else %}
+            <span class="md-header-nav__topic">{{ config.site_name }}</span>
+            <span class="md-header-nav__topic">{{ page.title }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+        {% include "partials/search.html" %}
+      </div>
+      {% if config.repo_url %}
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            {% include "partials/source.html" %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+</header>

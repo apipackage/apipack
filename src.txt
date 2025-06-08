@@ -1,0 +1,51 @@
+apipack/
+├── apipack/                    # Main package
+│   ├── __init__.py
+│   ├── core/                   # Core engine
+│   │   ├── __init__.py
+│   │   ├── engine.py          # Main orchestrator
+│   │   ├── parser.py          # Function spec parser
+│   │   ├── generator.py       # Code generator
+│   │   ├── validator.py       # Generated code validator
+│   │   └── deployer.py        # Deployment manager
+│   ├── llm/                   # LLM integration
+│   │   ├── __init__.py
+│   │   ├── mistral_client.py  # Mistral 7B client
+│   │   ├── prompt_manager.py  # Prompt templates
+│   │   └── response_parser.py # LLM response parser
+│   ├── templates/             # Template system
+│   │   ├── __init__.py
+│   │   ├── base/              # Base templates
+│   │   ├── interfaces/        # Interface templates
+│   │   │   ├── rest/
+│   │   │   ├── grpc/
+│   │   │   ├── graphql/
+│   │   │   ├── websocket/
+│   │   │   └── cli/
+│   │   ├── languages/         # Language-specific templates
+│   │   │   ├── python/
+│   │   │   ├── javascript/
+│   │   │   ├── golang/
+│   │   │   └── rust/
+│   │   └── registry.py        # Template registry
+│   ├── plugins/               # Plugin system
+│   │   ├── __init__.py
+│   │   ├── base_plugin.py
+│   │   └── builtin/           # Built-in plugins
+│   ├── config/                # Configuration
+│   │   ├── __init__.py
+│   │   ├── settings.py
+│   │   └── schemas.py
+│   └── utils/                 # Utilities
+│       ├── __init__.py
+│       ├── file_utils.py
+│       ├── docker_utils.py
+│       └── test_utils.py
+├── examples/                  # Example projects
+├── tests/                     # Test suite
+├── docs/                      # Documentation
+├── scripts/                   # Setup scripts
+├── pyproject.toml            # Project configuration
+├── requirements.txt          # Dependencies
+├── README.md                 # Main documentation
+└── setup.py                  # Package setup

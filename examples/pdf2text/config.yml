@@ -1,0 +1,164 @@
+project:
+  name: "pdf2text-service"
+  description: "PDF to text extraction service with multiple interfaces"
+  version: "1.0.0"
+  author: "APIpack Generator"
+
+language: python
+
+interfaces:
+  - rest
+  - grpc
+  - cli
+
+functions:
+  - name: "extract_text"
+    description: "Extract text content from PDF files"
+    input_type: "bytes"
+    output_type: "string"
+    parameters:
+      - name: "pdf_data"
+        type: "bytes"
+        description: "PDF file binary data"
+        required: true
+      - name: "page_numbers"
+        type: "list"
+        description: "Specific page numbers to extract (optional)"
+        required: false
+        default: null
+    dependencies:
+      - "PyPDF2>=3.0.0"
+      - "pdfplumber>=0.9.0"
+    examples:
+      - input:
+          pdf_data: "<binary PDF data>"
+          page_numbers: null
+        output: "Extracted text from all pages"
+      - input:
+          pdf_data: "<binary PDF data>"
+          page_numbers: [1, 2, 3]
+        output: "Extracted text from pages 1, 2, and 3"
+    rest_config:
+      path: "/extract"
+      method: "POST"
+      content_type: "multipart/form-data"
+    grpc_config:
+      service: "PDFService"
+      method: "ExtractText"
+    cli_config:
+      command: "extract"
+      flags:
+        - name: "pages"
+          description: "Comma-separated page numbers"
+          type: "string"
+
+  - name: "extract_metadata"
+    description: "Extract metadata from PDF files"
+    input_type: "bytes"
+    output_type: "dict"
+    parameters:
+      - name: "pdf_data"
+        type: "bytes"
+        description: "PDF file binary data"
+        required: true
+    dependencies:
+      - "PyPDF2>=3.0.0"
+    examples:
+      - input:
+          pdf_data: "<binary PDF data>"
+        output:
+          title: "Document Title"
+          author: "Document Author"
+          pages: 10
+          created: "2024-01-01T00:00:00Z"
+    rest_config:
+      path: "/metadata"
+      method: "POST"
+    grpc_config:
+      service: "PDFService"
+      method: "ExtractMetadata"
+    cli_config:
+      command: "metadata"
+
+# Global settings
+settings:
+  max_file_size: "50MB"
+  timeout: 30
+  logging_level: "INFO"
+
+# REST API specific configuration
+rest:
+  host: "0.0.0.0"
+  port: 8080
+  cors_enabled: true
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+  authentication:
+    enabled: false
+    type: "bearer"
+
+# gRPC specific configuration
+grpc:
+  host: "0.0.0.0"
+  port: 50051
+  max_message_size: "50MB"
+  compression: "gzip"
+
+# CLI specific configuration
+cli:
+  name: "pdf2text"
+  description: "PDF text extraction command-line tool"
+  global_flags:
+    - name: "verbose"
+      short: "v"
+      description: "Enable verbose output"
+      type: "bool"
+    - name: "output"
+      short: "o"
+      description: "Output file path"
+      type: "string"
+
+# Deployment configuration
+deployment:
+  docker:
+    base_image: "python:3.11-slim"
+    expose_ports: [8080, 50051]
+    environment_variables:
+      PYTHONPATH: "/app"
+      LOG_LEVEL: "INFO"
+    health_check:
+      endpoint: "/health"
+      interval: "30s"
+      timeout: "10s"
+      retries: 3
+
+  kubernetes:
+    replicas: 3
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+    service_type: "ClusterIP"
+
+# Testing configuration
+testing:
+  frameworks:
+    - "pytest"
+    - "unittest"
+  coverage_threshold: 80
+  test_files:
+    - "test_extract_text.py"
+    - "test_extract_metadata.py"
+    - "test_integration.py"
+  mock_dependencies: true
+
+# Documentation
+documentation:
+  generate_openapi: true
+  generate_readme: true
+  generate_examples: true
+  api_docs_path: "/docs"

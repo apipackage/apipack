@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+  
+  <!-- Custom JavaScript -->
+  {% block scripts %}
+    {{ super() }}
+    <!-- Add any custom JavaScript here -->
+  {% endblock %}
+{% endblock %}

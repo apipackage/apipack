@@ -1,0 +1,219 @@
+version: '3.8'
+
+services:
+  # Ollama service for local LLM
+  ollama:
+    image: ollama/ollama:latest
+    container_name: apipack-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./scripts/setup_ollama.sh:/setup_ollama.sh
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    command: >
+      sh -c "ollama serve &
+             sleep 10 &&
+             ollama pull mistral:7b &&
+             wait"
+
+  # APIpack development service
+  apipack-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: apipack-dev
+    ports:
+      - "8000:8000"  # Documentation server
+      - "8080:8080"  # Generated service port
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # For Docker-in-Docker
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - PYTHONPATH=/app
+      - DEVELOPMENT=true
+    depends_on:
+      ollama:
+        condition: service_healthy
+    working_dir: /app
+    command: >
+      sh -c "pip install -e .[dev] &&
+             make serve-docs"
+
+  # Example: Generated PDF service
+  pdf2text-service:
+    build:
+      context: ./generated/pdf2text
+      dockerfile: Dockerfile
+    container_name: pdf2text-service
+    ports:
+      - "8081:8080"  # REST API
+      - "50051:50051"  # gRPC
+    environment:
+      - LOG_LEVEL=INFO
+      - MAX_FILE_SIZE=50MB
+    volumes:
+      - ./test-files:/app/test-files:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - examples
+
+  # Example: Generated HTML to PDF service
+  html2pdf-service:
+    build:
+      context: ./generated/html2pdf
+      dockerfile: Dockerfile
+    container_name: html2pdf-service
+    ports:
+      - "8082:3000"  # REST API
+      - "3001:3001"  # WebRTC
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - examples
+
+  # Example: Generated Image resize service
+  image-resize-service:
+    build:
+      context: ./generated/image-resize
+      dockerfile: Dockerfile
+    container_name: image-resize-service
+    ports:
+      - "8083:8080"  # REST API
+      - "50052:50051"  # gRPC
+    environment:
+      - GIN_MODE=release
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - examples
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: apipack-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    profiles:
+      - cache
+
+  # PostgreSQL for metadata storage (optional)
+  postgres:
+    image: postgres:15-alpine
+    container_name: apipack-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=apipack
+      - POSTGRES_USER=apipack
+      - POSTGRES_PASSWORD=apipack_dev_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    profiles:
+      - database
+
+  # Prometheus for monitoring (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: apipack-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    profiles:
+      - monitoring
+
+  # Grafana for dashboards (optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: apipack-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    profiles:
+      - monitoring
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: apipack-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - pdf2text-service
+      - html2pdf-service
+      - image-resize-service
+    profiles:
+      - proxy
+
+  # Load testing service
+  locust:
+    image: locustio/locust
+    container_name: apipack-locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./tests/load:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --host=http://nginx
+    profiles:
+      - testing
+
+volumes:
+  ollama_data:
+    driver: local
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -1,0 +1,16 @@
+<!-- Social links -->
+{% if config.extra.social %}
+  <div class="md-footer-social">
+    {% for social in config.extra.social %}
+      <a href="{{ social.link }}" 
+         class="md-footer-social__link" 
+         target="_blank" 
+         rel="noopener"
+         title="{{ social.name }}">
+        <span class="md-footer-social__icon">
+          <i class="fa fa-{{ social.icon }}"></i>
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+{% endif %}
