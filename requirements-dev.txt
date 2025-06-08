@@ -1,0 +1,172 @@
+# Development dependencies for APIpack
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.1
+pytest-mock>=3.11.1
+pytest-xdist>=3.3.1
+pytest-timeout>=2.1.0
+pytest-benchmark>=4.0.0
+responses>=0.23.3
+httpx>=0.24.1
+
+# Code quality
+black>=23.7.0
+isort>=5.12.0
+flake8>=6.0.0
+flake8-docstrings>=1.7.0
+flake8-bugbear>=23.7.10
+mypy>=1.5.1
+pylint>=2.17.5
+bandit>=1.7.5
+safety>=2.3.4
+
+# Pre-commit hooks
+pre-commit>=3.3.3
+
+# Documentation
+sphinx>=7.1.2
+sphinx-rtd-theme>=1.3.0
+sphinx-autodoc-typehints>=1.24.0
+myst-parser>=2.0.0
+sphinx-click>=5.0.1
+
+# Development tools
+bump2version>=1.0.1
+watchdog>=3.0.0
+ipython>=8.14.0
+ipdb>=0.13.13
+rich>=13.5.2
+
+# Performance profiling
+memory-profiler>=0.61.0
+line-profiler>=4.1.1
+py-spy>=0.3.14
+
+# Load testing
+locust>=2.16.1
+
+# Containerization testing
+docker>=6.1.3
+testcontainers>=3.7.1
+
+# Kubernetes testing
+kubernetes>=27.2.0
+
+# Static analysis
+vulture>=2.9.1
+radon>=6.0.1
+xenon>=0.9.1
+
+# Type checking
+types-PyYAML>=6.0.12.11
+types-requests>=2.31.0.2
+types-setuptools>=68.1.0.1
+
+# Mock services
+responses>=0.23.3
+pytest-httpserver>=1.0.8
+aioresponses>=0.7.4
+
+# Database testing (if needed)
+pytest-postgresql>=5.0.0
+pytest-redis>=3.0.2
+
+# Async testing
+pytest-asyncio>=0.21.1
+asynctest>=0.13.0
+
+# Configuration testing
+pytest-env>=0.8.2
+
+# Parallel testing
+pytest-parallel>=0.1.1
+
+# Test reporting
+pytest-html>=3.2.0
+pytest-json-report>=1.5.0
+allure-pytest>=2.13.2
+
+# Security testing
+pip-audit>=2.6.1
+
+# Code formatting
+autopep8>=2.0.2
+docformatter>=1.7.5
+
+# Import sorting
+seed-isort-config>=2.2.0
+
+# Dependency management
+pip-tools>=7.1.0
+pipdeptree>=2.13.0
+
+# Version management
+setuptools-scm>=7.1.0
+
+# Build tools
+build>=0.10.0
+twine>=4.0.2
+
+# Git hooks
+gitpython>=3.1.32
+
+# File watching
+watchfiles>=0.19.0
+
+# JSON/YAML validation
+jsonschema>=4.19.0
+yamllint>=1.32.0
+
+# Template testing
+jinja2-cli>=0.8.2
+
+# API testing
+tavern>=2.0.1
+
+# Benchmarking
+asv>=0.6.1
+
+# Code complexity
+mccabe>=0.7.0
+
+# Dependency checking
+pip-check>=2.8.1
+
+# License checking
+pip-licenses>=4.3.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Debugging
+pudb>=2022.1.3
+
+# Network testing
+pytest-socket>=0.6.0
+
+# Time testing
+freezegun>=1.2.2
+time-machine>=2.12.0
+
+# Random testing
+hypothesis>=6.82.6
+
+# Property-based testing
+pytest-qt>=4.2.0
+
+# Snapshot testing
+syrupy>=4.0.8
+
+# Coverage plugins
+coverage[toml]>=7.2.7
+pytest-cov>=4.1.0
+
+# Linting plugins
+flake8-comprehensions>=3.14.0
+flake8-simplify>=0.20.0
+flake8-annotations>=3.0.1
+
+# Development server
+uvicorn[standard]>=0.23.2

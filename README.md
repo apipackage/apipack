@@ -472,6 +472,30 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ---
 
 **Made with ❤️ by the APIpack team**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# APIpack - Architektura Systemu
+
 ## 🎯 Cel projektu
 
 APIpack to framework do automatycznego generowania pakietów API z funkcji biznesowych przy użyciu lokalnych modeli LLM (Mistral 7B) i systemu szablonów.
@@ -504,61 +528,499 @@ APIpack to framework do automatycznego generowania pakietów API z funkcji bizne
                        └─────────────────────────────────────┘
 ```
 
-## 📁 Struktura projektu
+## 📁 Kompletna struktura projektu
 
 ```
 apipack/
-├── apipack/                    # Main package
-│   ├── __init__.py
-│   ├── core/                   # Core engine
-│   │   ├── __init__.py
-│   │   ├── engine.py          # Main orchestrator
-│   │   ├── parser.py          # Function spec parser
-│   │   ├── generator.py       # Code generator
-│   │   ├── validator.py       # Generated code validator
-│   │   └── deployer.py        # Deployment manager
-│   ├── llm/                   # LLM integration
-│   │   ├── __init__.py
-│   │   ├── mistral_client.py  # Mistral 7B client
-│   │   ├── prompt_manager.py  # Prompt templates
-│   │   └── response_parser.py # LLM response parser
-│   ├── templates/             # Template system
-│   │   ├── __init__.py
-│   │   ├── base/              # Base templates
-│   │   ├── interfaces/        # Interface templates
+├── README.md                       ✅ # Main documentation
+├── LICENSE                         🔲 # MIT License
+├── CHANGELOG.md                    🔲 # Version history
+├── CONTRIBUTING.md                 🔲 # Contribution guidelines
+├── CODE_OF_CONDUCT.md             🔲 # Community guidelines
+├── .gitignore                      🔲 # Git ignore rules
+├── .pre-commit-config.yaml        🔲 # Pre-commit hooks
+├── .github/                        🔲 # GitHub configuration
+│   ├── workflows/
+│   │   ├── ci.yml                 🔲 # Continuous Integration
+│   │   ├── release.yml            🔲 # Release automation
+│   │   └── docs.yml               🔲 # Documentation build
+│   ├── ISSUE_TEMPLATE/            🔲 # Issue templates
+│   ├── PULL_REQUEST_TEMPLATE.md   🔲 # PR template
+│   └── dependabot.yml             🔲 # Dependency updates
+├── setup.py                        ✅ # Package setup
+├── pyproject.toml                  ✅ # Modern Python config
+├── requirements.txt                ✅ # Core dependencies
+├── requirements-dev.txt            🔲 # Development dependencies
+├── Makefile                        ✅ # Development automation
+├── docker-compose.yml              ✅ # Development environment
+├── Dockerfile                      🔲 # Production container
+├── Dockerfile.dev                  🔲 # Development container
+├── .dockerignore                   🔲 # Docker ignore rules
+│
+├── apipack/                        # Main package
+│   ├── __init__.py                ✅ # Package initialization
+│   ├── py.typed                   🔲 # Type hints marker
+│   ├── core/                      # Core engine
+│   │   ├── __init__.py           🔲 # Core module init
+│   │   ├── engine.py             ✅ # Main orchestrator
+│   │   ├── parser.py             ✅ # Function spec parser
+│   │   ├── generator.py          🔲 # Code generator
+│   │   ├── validator.py          🔲 # Generated code validator
+│   │   └── deployer.py           🔲 # Deployment manager
+│   ├── llm/                       # LLM integration
+│   │   ├── __init__.py           🔲 # LLM module init
+│   │   ├── mistral_client.py     ✅ # Mistral 7B client
+│   │   ├── prompt_manager.py     ✅ # Prompt templates
+│   │   ├── response_parser.py    🔲 # LLM response parser
+│   │   └── base_client.py        🔲 # Base LLM client
+│   ├── templates/                 # Template system
+│   │   ├── __init__.py           🔲 # Templates module init
+│   │   ├── registry.py           ✅ # Template registry
+│   │   ├── base/                 # Base templates
+│   │   │   ├── __init__.py       🔲
+│   │   │   ├── function.py.j2    🔲 # Base function template
+│   │   │   ├── requirements.txt.j2 🔲 # Dependencies template
+│   │   │   ├── dockerfile.j2     🔲 # Docker template
+│   │   │   └── readme.md.j2      🔲 # README template
+│   │   ├── interfaces/           # Interface templates
+│   │   │   ├── __init__.py       🔲
 │   │   │   ├── rest/
+│   │   │   │   ├── __init__.py   🔲
+│   │   │   │   ├── template.yml  🔲 # REST template config
+│   │   │   │   ├── server.py.template ✅ # REST server
+│   │   │   │   ├── client.py.template 🔲 # REST client
+│   │   │   │   ├── server.js.template 🔲 # Node.js server
+│   │   │   │   ├── server.go.template 🔲 # Go server
+│   │   │   │   └── openapi.yml.j2 🔲 # OpenAPI spec
 │   │   │   ├── grpc/
+│   │   │   │   ├── __init__.py   🔲
+│   │   │   │   ├── template.yml  🔲 # gRPC template config
+│   │   │   │   ├── server.py.template 🔲 # gRPC server
+│   │   │   │   ├── client.py.template 🔲 # gRPC client
+│   │   │   │   ├── service.proto.j2 🔲 # Protocol buffer
+│   │   │   │   └── server.go.template 🔲 # Go gRPC server
 │   │   │   ├── graphql/
+│   │   │   │   ├── __init__.py   🔲
+│   │   │   │   ├── server.py.template 🔲 # GraphQL server
+│   │   │   │   ├── schema.graphql.j2 🔲 # GraphQL schema
+│   │   │   │   └── resolvers.py.template 🔲 # Resolvers
 │   │   │   ├── websocket/
+│   │   │   │   ├── __init__.py   🔲
+│   │   │   │   ├── server.py.template 🔲 # WebSocket server
+│   │   │   │   └── client.js.template 🔲 # WebSocket client
 │   │   │   └── cli/
-│   │   ├── languages/         # Language-specific templates
+│   │   │       ├── __init__.py   🔲
+│   │   │       ├── main.py.template 🔲 # CLI main
+│   │   │       ├── cli.js.template 🔲 # Node.js CLI
+│   │   │       └── main.go.template 🔲 # Go CLI
+│   │   ├── languages/            # Language-specific templates
+│   │   │   ├── __init__.py       🔲
 │   │   │   ├── python/
+│   │   │   │   ├── __init__.py   🔲
+│   │   │   │   ├── config.yml    🔲 # Python config
+│   │   │   │   ├── function.py.j2 🔲 # Python function
+│   │   │   │   ├── test.py.j2    🔲 # Python test
+│   │   │   │   └── requirements.txt.j2 🔲 # Python deps
 │   │   │   ├── javascript/
-│   │   │   ├── golang/
+│   │   │   │   ├── __init__.py   🔲
+│   │   │   │   ├── config.yml    🔲 # JS config
+│   │   │   │   ├── function.js.j2 🔲 # JS function
+│   │   │   │   ├── test.js.j2    🔲 # JS test
+│   │   │   │   └── package.json.j2 🔲 # NPM config
+│   │   │   ├── go/
+│   │   │   │   ├── config.yml    🔲 # Go config
+│   │   │   │   ├── function.go.j2 🔲 # Go function
+│   │   │   │   ├── test.go.j2    🔲 # Go test
+│   │   │   │   └── go.mod.j2     🔲 # Go modules
 │   │   │   └── rust/
-│   │   └── registry.py        # Template registry
-│   ├── plugins/               # Plugin system
-│   │   ├── __init__.py
-│   │   ├── base_plugin.py
-│   │   └── builtin/           # Built-in plugins
-│   ├── config/                # Configuration
-│   │   ├── __init__.py
-│   │   ├── settings.py
-│   │   └── schemas.py
-│   └── utils/                 # Utilities
-│       ├── __init__.py
-│       ├── file_utils.py
-│       ├── docker_utils.py
-│       └── test_utils.py
-├── examples/                  # Example projects
-├── tests/                     # Test suite
-├── docs/                      # Documentation
-├── scripts/                   # Setup scripts
-├── pyproject.toml            # Project configuration
-├── requirements.txt          # Dependencies
-├── README.md                 # Main documentation
-└── setup.py                  # Package setup
+│   │   │       ├── config.yml    🔲 # Rust config
+│   │   │       ├── function.rs.j2 🔲 # Rust function
+│   │   │       ├── test.rs.j2    🔲 # Rust test
+│   │   │       └── cargo.toml.j2 🔲 # Cargo config
+│   │   └── deployment/           # Deployment templates
+│   │       ├── __init__.py       🔲
+│   │       ├── docker/
+│   │       │   ├── dockerfile.j2 🔲 # Dockerfile
+│   │       │   └── compose.yml.j2 🔲 # Docker Compose
+│   │       ├── kubernetes/
+│   │       │   ├── deployment.yml.j2 🔲 # K8s deployment
+│   │       │   ├── service.yml.j2 🔲 # K8s service
+│   │       │   └── ingress.yml.j2 🔲 # K8s ingress
+│   │       └── ci/
+│   │           ├── github.yml.j2 🔲 # GitHub Actions
+│   │           ├── gitlab.yml.j2 🔲 # GitLab CI
+│   │           └── jenkins.j2    🔲 # Jenkins pipeline
+│   ├── plugins/                   # Plugin system
+│   │   ├── __init__.py           🔲 # Plugin module init
+│   │   ├── base_plugin.py        🔲 # Base plugin class
+│   │   ├── manager.py            🔲 # Plugin manager
+│   │   └── builtin/              # Built-in plugins
+│   │       ├── __init__.py       🔲
+│   │       ├── rest.py           🔲 # REST plugin
+│   │       ├── grpc.py           🔲 # gRPC plugin
+│   │       ├── graphql.py        🔲 # GraphQL plugin
+│   │       ├── websocket.py      🔲 # WebSocket plugin
+│   │       └── cli.py            🔲 # CLI plugin
+│   ├── config/                    # Configuration
+│   │   ├── __init__.py           🔲 # Config module init
+│   │   ├── settings.py           🔲 # Settings management
+│   │   ├── schemas.py            🔲 # Configuration schemas
+│   │   └── defaults.yml          🔲 # Default configuration
+│   ├── utils/                     # Utilities
+│   │   ├── __init__.py           🔲 # Utils module init
+│   │   ├── file_utils.py         🔲 # File operations
+│   │   ├── docker_utils.py       🔲 # Docker utilities
+│   │   ├── git_utils.py          🔲 # Git operations
+│   │   ├── test_utils.py         🔲 # Testing utilities
+│   │   └── validation.py         🔲 # Validation helpers
+│   ├── exceptions.py              🔲 # Custom exceptions
+│   └── cli.py                     ✅ # Command-line interface
+│
+├── examples/                      # Example projects
+│   ├── README.md                  🔲 # Examples documentation
+│   ├── pdf2text/
+│   │   ├── config.yml            ✅ # PDF service config
+│   │   ├── functions/
+│   │   │   └── extract_text.py   🔲 # Example function
+│   │   ├── generated/            🔲 # Generated code (gitignored)
+│   │   ├── tests/
+│   │   │   └── test_extract.py   🔲 # Function tests
+│   │   └── ansible/
+│   │       └── test.yml          🔲 # E2E tests
+│   ├── html2pdf/
+│   │   ├── config.yml            🔲 # HTML to PDF config
+│   │   ├── functions/
+│   │   │   └── convert.js        🔲 # JavaScript function
+│   │   └── tests/                🔲 # Tests
+│   ├── image-resize/
+│   │   ├── config.yml            🔲 # Image resize config
+│   │   ├── functions/
+│   │   │   └── resize.go         🔲 # Go function
+│   │   └── tests/                🔲 # Tests
+│   └── multi-service/
+│       ├── config.yml            🔲 # Multi-function service
+│       └── functions/            🔲 # Multiple functions
+│
+├── tests/                         # Test suite
+│   ├── __init__.py               🔲 # Tests init
+│   ├── conftest.py               🔲 # Pytest configuration
+│   ├── unit/                     # Unit tests
+│   │   ├── __init__.py           🔲
+│   │   ├── test_engine.py        🔲 # Engine tests
+│   │   ├── test_parser.py        🔲 # Parser tests
+│   │   ├── test_generator.py     🔲 # Generator tests
+│   │   ├── test_templates.py     🔲 # Template tests
+│   │   ├── test_llm.py           🔲 # LLM client tests
+│   │   └── test_cli.py           🔲 # CLI tests
+│   ├── integration/              # Integration tests
+│   │   ├── __init__.py           🔲
+│   │   ├── test_end_to_end.py    🔲 # Full pipeline tests
+│   │   ├── test_llm_integration.py 🔲 # LLM integration
+│   │   └── test_docker.py        🔲 # Docker tests
+│   ├── e2e/                      # End-to-end tests
+│   │   ├── __init__.py           🔲
+│   │   ├── test_examples.py      🔲 # Example generation tests
+│   │   └── test_deployment.py    🔲 # Deployment tests
+│   ├── performance/              # Performance tests
+│   │   ├── __init__.py           🔲
+│   │   ├── benchmark.py          🔲 # Performance benchmarks
+│   │   └── locustfile.py         🔲 # Load testing
+│   ├── fixtures/                 # Test fixtures
+│   │   ├── sample_specs/         🔲 # Sample specifications
+│   │   ├── sample_functions/     🔲 # Sample functions
+│   │   └── test_data/            🔲 # Test data files
+│   └── mock_servers/             # Mock services for testing
+│       ├── mock_ollama.py        🔲 # Mock Ollama server
+│       └── mock_registry.py      🔲 # Mock template registry
+│
+├── docs/                          # Documentation
+│   ├── index.md                  🔲 # Main index
+│   ├── getting-started.md        ✅ # Getting started guide
+│   ├── installation.md           🔲 # Installation guide
+│   ├── user-guide/               # User documentation
+│   │   ├── specification.md      🔲 # Function specifications
+│   │   ├── templates.md          🔲 # Template system
+│   │   ├── cli.md                🔲 # CLI reference
+│   │   ├── api.md                🔲 # Python API
+│   │   └── deployment.md         🔲 # Deployment guide
+│   ├── developer-guide/          # Developer documentation
+│   │   ├── architecture.md       🔲 # System architecture
+│   │   ├── plugins.md            🔲 # Plugin development
+│   │   ├── templates.md          🔲 # Template development
+│   │   └── contributing.md       🔲 # How to contribute
+│   ├── examples/                 # Example documentation
+│   │   ├── quickstart.md         🔲 # Quick examples
+│   │   ├── advanced.md           🔲 # Advanced examples
+│   │   └── patterns.md           🔲 # Common patterns
+│   ├── api/                      # API documentation
+│   │   ├── core.md               🔲 # Core API
+│   │   ├── templates.md          🔲 # Template API
+│   │   └── plugins.md            🔲 # Plugin API
+│   ├── conf.py                   🔲 # Sphinx configuration
+│   ├── requirements.txt          🔲 # Docs dependencies
+│   └── Makefile                  🔲 # Docs build automation
+│
+├── scripts/                       # Utility scripts
+│   ├── setup_ollama.sh           🔲 # Ollama setup script
+│   ├── validate_templates.py     🔲 # Template validation
+│   ├── benchmark_languages.py    🔲 # Language benchmarks
+│   ├── profile_generation.py     🔲 # Performance profiling
+│   ├── check_dependencies.py     🔲 # Dependency checker
+│   ├── release.py                🔲 # Release automation
+│   └── init.sql                  🔲 # Database initialization
+│
+├── monitoring/                    # Monitoring configuration
+│   ├── prometheus.yml            🔲 # Prometheus config
+│   ├── grafana/
+│   │   ├── dashboards/           🔲 # Grafana dashboards
+│   │   └── datasources/          🔲 # Data sources
+│   └── alerts/                   🔲 # Alert configurations
+│
+├── nginx/                         # Nginx configuration
+│   ├── nginx.conf                🔲 # Main config
+│   └── ssl/                      🔲 # SSL certificates
+│
+└── deployment/                    # Deployment configurations
+    ├── kubernetes/               🔲 # K8s manifests
+    │   ├── namespace.yml         🔲
+    │   ├── deployment.yml        🔲
+    │   ├── service.yml           🔲
+    │   └── ingress.yml           🔲
+    ├── terraform/                🔲 # Infrastructure as Code
+    │   ├── main.tf               🔲
+    │   ├── variables.tf          🔲
+    │   └── outputs.tf            🔲
+    ├── ansible/                  🔲 # Ansible playbooks
+    │   ├── deploy.yml            🔲
+    │   ├── inventory/            🔲
+    │   └── roles/                🔲
+    └── helm/                     🔲 # Helm charts
+        ├── Chart.yaml            🔲
+        ├── values.yaml           🔲
+        └── templates/            🔲
 ```
+
+## Status oznaczenia:
+- ✅ Utworzone
+- 🔲 Do utworzenia
+- 🚧 W trakcie
+
+## Kolejność implementacji (priorytet):
+
+### Faza 1 - Podstawowa funkcjonalność
+1. **Core modules** - generator.py, validator.py, deployer.py
+2. **LLM integration** - response_parser.py, base_client.py
+3. **Config system** - settings.py, schemas.py, defaults.yml
+4. **Utils** - file_utils.py, validation.py
+
+### Faza 2 - Szablony i pluginy
+1. **Base templates** - function.py.j2, requirements.txt.j2, dockerfile.j2
+2. **Interface templates** - wszystkie szablony interfejsów
+3. **Language templates** - wszystkie szablony językowe
+4. **Plugin system** - base_plugin.py, manager.py, builtin plugins
+
+### Faza 3 - Testy i dokumentacja
+1. **Test suite** - wszystkie testy jednostkowe i integracyjne
+2. **Documentation** - pełna dokumentacja Sphinx
+3. **Examples** - kompletne przykłady
+
+### Faza 4 - Deployment i monitoring
+1. **CI/CD** - GitHub Actions, release automation
+2. **Docker** - Dockerfile, docker-compose
+3. **Kubernetes** - manifesty K8s
+4. **Monitoring** - Prometheus, Grafana
+
+## 🔄 Przepływ pracy
+
+### 1. Input Processing
+```python
+function_spec = {
+    "name": "pdf_to_text",
+    "description": "Extract text from PDF files",
+    "input_type": "bytes",
+    "output_type": "string",
+    "interfaces": ["rest", "grpc", "cli"]
+}
+```
+
+### 2. LLM Function Generation
+- Mistral 7B generuje implementację funkcji
+- Optimized prompts dla różnych języków
+- Walidacja i sanityzacja kodu
+
+### 3. Template Processing
+- Wybór odpowiednich szablonów
+- Generowanie interfejsów API
+- Integracja z funkcjami biznesowymi
+
+### 4. Package Assembly
+- Kompilacja wszystkich komponentów
+- Generowanie testów
+- Przygotowanie deployment files
+
+## 🧩 Komponenty systemu
+
+### Core Engine
+- **Parser**: Analizuje specyfikację funkcji
+- **Generator**: Orkiestruje generowanie kodu
+- **Validator**: Sprawdza poprawność kodu
+- **Deployer**: Zarządza wdrożeniem
+
+### LLM Integration
+- **Mistral Client**: Interface do Mistral 7B
+- **Prompt Manager**: Zarządza promptami
+- **Response Parser**: Przetwarza odpowiedzi LLM
+
+### Template System
+- **Registry**: Rejestr dostępnych szablonów
+- **Base Templates**: Podstawowe struktury
+- **Interface Templates**: Szablony interfejsów
+- **Language Templates**: Szablony językowe
+
+### Plugin System
+- **Base Plugin**: Abstrakcyjna klasa bazowa
+- **Built-in Plugins**: Wbudowane rozszerzenia
+- **Custom Plugins**: Możliwość dodawania własnych
+
+## 🔌 Extensibility Points
+
+### 1. Nowe Interfejsy
+```python
+# plugins/custom_interface.py
+class CustomInterfacePlugin(BasePlugin):
+    def generate(self, function_spec):
+        # Custom interface generation logic
+        pass
+```
+
+### 2. Nowe Języki
+```yaml
+# templates/languages/kotlin/config.yml
+language: kotlin
+extension: .kt
+runtime: jvm
+dependencies:
+  - kotlinx-coroutines-core
+```
+
+### 3. Nowe LLM Providers
+```python
+# llm/custom_provider.py
+class CustomLLMProvider(BaseLLMProvider):
+    def generate_function(self, spec):
+        # Custom LLM integration
+        pass
+```
+
+## 📊 Konfiguracja
+
+### Global Settings
+```yaml
+# config/default.yml
+llm:
+  provider: mistral
+  model: mistral:7b
+  temperature: 0.1
+  max_tokens: 2048
+
+templates:
+  auto_discover: true
+  cache_enabled: true
+  validation_level: strict
+
+output:
+  format: package
+  include_tests: true
+  include_docs: true
+```
+
+### Project Settings
+```yaml
+# project.apipack.yml
+name: my-api-service
+language: python
+interfaces:
+  - rest
+  - grpc
+functions:
+  - spec: functions/pdf_to_text.yml
+  - spec: functions/image_resize.yml
+```
+
+## 🎯 Rozszerzalność
+
+### Template Discovery
+System automatycznie odkrywa nowe szablony w:
+- `~/.apipack/templates/`
+- `./templates/`
+- Package templates
+
+### Plugin Loading
+Plugins są ładowane z:
+- Built-in plugins
+- `~/.apipack/plugins/`
+- Project plugins directory
+
+### Custom Generators
+Możliwość dodania własnych generatorów:
+```python
+@register_generator("custom-api")
+class CustomAPIGenerator(BaseGenerator):
+    def generate(self, spec):
+        # Custom generation logic
+        pass
+```
+
+## 🚀 API Usage
+
+### Programmatic API
+```python
+from apipack import APIPackEngine
+
+engine = APIPackEngine()
+package = engine.generate_package(
+    function_specs=[pdf_to_text_spec],
+    interfaces=["rest", "grpc"],
+    language="python"
+)
+package.deploy()
+```
+
+### CLI Interface
+```bash
+apipack generate \
+  --spec functions.yml \
+  --interfaces rest,grpc \
+  --language python \
+  --output ./generated
+```
+
+### Configuration-based
+```bash
+apipack build --config project.apipack.yml
+```
+
+## 🔍 Monitoring & Observability
+
+### Metrics Collection
+- Generation time
+- Template usage
+- LLM token consumption
+- Success/failure rates
+
+### Logging
+- Structured logging
+- Debug modes
+- Performance profiling
+
+### Health Checks
+- Template validation
+- LLM connectivity
+- Generated code syntax check
+
+
+
+
 
 ## 🔄 Przepływ pracy
 

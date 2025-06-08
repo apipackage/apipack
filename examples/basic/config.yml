@@ -1,0 +1,37 @@
+# Basic API example configuration
+name: basic-api
+version: 1.0.0
+description: A basic example API generated with APIpack
+language: python
+interfaces:
+  - rest
+  - cli
+
+functions:
+  - name: greet
+    description: Returns a greeting message
+    parameters:
+      - name: name
+        type: string
+        description: Name to greet
+        required: true
+    return_type: string
+    examples:
+      - input: {name: "World"}
+        output: "Hello, World!"
+
+  - name: add_numbers
+    description: Adds two numbers together
+    parameters:
+      - name: a
+        type: number
+        description: First number
+        required: true
+      - name: b
+        type: number
+        description: Second number
+        required: true
+    return_type: number
+    examples:
+      - input: {a: 5, b: 3}
+        output: 8

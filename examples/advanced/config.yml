@@ -1,0 +1,219 @@
+# Advanced API example configuration
+name: todo-api
+version: 1.0.0
+description: A complete TODO API with multiple interfaces and language support
+author: APIpack User
+license: MIT
+
+# Supported languages and their specific settings
+languages:
+  - name: python
+    version: "3.8+"
+  - name: javascript
+    version: "ES2020"
+    package_manager: npm
+  - name: go
+    version: "1.20+"
+  - name: rust
+    version: "2021"
+
+# Interfaces to generate
+interfaces:
+  - type: rest
+    framework: fastapi
+  - type: grpc
+    version: "1.0"
+  - type: graphql
+    framework: ariadne
+  - type: websocket
+    framework: fastapi
+  - type: cli
+    framework: typer
+
+# Database configuration
+database:
+  type: sql
+  dialects: [sqlite, postgresql, mysql]
+  orm: sqlalchemy
+  migrations: alembic
+
+# Authentication
+auth:
+  enabled: true
+  methods: [jwt, oauth2]
+  providers: [google, github]
+
+# API functions
+functions:
+  - name: create_todo
+    description: Create a new TODO item
+    parameters:
+      - name: title
+        type: string
+        required: true
+        description: Title of the TODO item
+      - name: description
+        type: string
+        required: false
+        description: Detailed description
+      - name: due_date
+        type: datetime
+        required: false
+        description: Due date for the TODO
+      - name: priority
+        type: enum
+        values: [low, medium, high]
+        default: medium
+        required: false
+    return_type: TodoItem
+    examples:
+      - input: {title: "Complete APIpack example", description: "Finish the advanced example", priority: "high"}
+        output: {id: 1, title: "Complete APIpack example", status: "pending"}
+
+  - name: get_todo
+    description: Get a TODO item by ID
+    parameters:
+      - name: id
+        type: integer
+        required: true
+        description: ID of the TODO item
+    return_type: TodoItem
+    examples:
+      - input: {id: 1}
+        output: {id: 1, title: "Complete APIpack example", status: "pending"}
+
+  - name: list_todos
+    description: List all TODO items with optional filtering
+    parameters:
+      - name: status
+        type: string
+        required: false
+        description: Filter by status
+      - name: priority
+        type: string
+        required: false
+        description: Filter by priority
+    return_type: List[TodoItem]
+    examples:
+      - input: {status: "pending"}
+        output: [{id: 1, title: "Complete APIpack example", status: "pending"}]
+
+  - name: update_todo
+    description: Update a TODO item
+    parameters:
+      - name: id
+        type: integer
+        required: true
+        description: ID of the TODO item
+      - name: title
+        type: string
+        required: false
+      - name: description
+        type: string
+        required: false
+      - name: status
+        type: enum
+        values: [pending, in_progress, completed, cancelled]
+        required: false
+    return_type: TodoItem
+
+  - name: delete_todo
+    description: Delete a TODO item
+    parameters:
+      - name: id
+        type: integer
+        required: true
+        description: ID of the TODO item to delete
+    return_type: boolean
+
+# Data models
+models:
+  TodoItem:
+    description: A TODO list item
+    fields:
+      id:
+        type: integer
+        description: Unique identifier
+        required: true
+      title:
+        type: string
+        description: Short title
+        required: true
+      description:
+        type: string
+        description: Detailed description
+        required: false
+      status:
+        type: enum
+        values: [pending, in_progress, completed, cancelled]
+        default: pending
+        required: true
+      priority:
+        type: enum
+        values: [low, medium, high]
+        default: medium
+        required: true
+      created_at:
+        type: datetime
+        description: Creation timestamp
+        required: true
+      updated_at:
+        type: datetime
+        description: Last update timestamp
+        required: true
+      due_date:
+        type: datetime
+        description: Due date
+        required: false
+
+# API documentation
+documentation:
+  enabled: true
+  format: openapi
+  version: 3.0.0
+  ui: swagger
+  themes: [light, dark]
+
+# Deployment options
+deployment:
+  docker: true
+  kubernetes: true
+  serverless:
+    providers: [aws, google, azure]
+
+# Monitoring and observability
+monitoring:
+  logging: true
+  metrics: prometheus
+  tracing: opentelemetry
+  health_checks: true
+
+# Testing
+testing:
+  unit_tests: true
+  integration_tests: true
+  e2e_tests: true
+  test_coverage: true
+  test_frameworks: [pytest, jest, gotest]
+
+# CI/CD
+ci_cd:
+  github_actions: true
+  gitlab_ci: true
+  docker_build: true
+  k8s_deployment: true
+
+# Dependencies
+dependencies:
+  python:
+    - fastapi>=0.68.0
+    - sqlalchemy>=1.4.0
+    - pydantic>=1.8.0
+  javascript:
+    - express: ^4.17.1
+    - typeorm: ^0.2.41
+  go:
+    - github.com/gin-gonic/gin: v1.7.7
+  rust:
+    - actix-web = "4.0"
+    - sqlx = { version = "0.6", features = ["runtime-tokio-rustls"] }
