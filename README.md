@@ -1,5 +1,3 @@
-# APIpack - Architektura Systemu
-
 # APIpack 🚀
 
 **Automated API Package Generator with LLM Integration**

@@ -127,6 +127,9 @@ clean:
 release: build
 	python -m twine upload dist/*
 
+publish: release
+	@echo "Package published to PyPI"
+
 # Development utilities
 install-pre-commit:
 	pre-commit install
